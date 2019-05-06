@@ -15,7 +15,8 @@ const PlanSchema = Schema({
         type: Date,
         default: Date.now
     },
-    targetTime: Date,
+    targetTime: String,
+    title: String,
     content: String,
     info: Object,
     access_token: String,
