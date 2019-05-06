@@ -69,7 +69,7 @@ router.post('/login_yb', (req, res) => {
                 }
                 res.json({success: true, id: user_id, access_token: access_info.access_token, token, info});
             });
-        },
+        }
     )
 });
 
