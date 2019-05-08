@@ -1,6 +1,7 @@
 const async = require("async");
 const express = require('express');
 const forbiddenError = require('../lib/errors').forbiddenError;
+const serverInternalError = require('../lib/errors').serverInternalError;
 const Plan = require('../model/Plan');
 const User = require('../model/User');
 
@@ -71,6 +72,7 @@ router.route('/:planId')
                     });
                 },
                 function modifyPlan(plan, callback) {
+                    if (!plan) return callback(serverInternalError());
                     plan.content = req.body.content;
                     plan.title = req.body.title;
                     plan.targetTime = req.body.targetTime;
@@ -106,6 +108,7 @@ router.route('/:planId')
                     });
                 },
                 function removePlan(plan, callback) {
+                    if (!plan) return callback(serverInternalError());
                     plan.remove((err) => {
                         if (err) return callback(err);
                     });
