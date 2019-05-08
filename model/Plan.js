@@ -18,9 +18,7 @@ const PlanSchema = Schema({
     targetTime: String,
     title: String,
     content: String,
-    info: Object,
-    access_token: String,
-    online: Boolean,
+    isAlarm: Boolean,
 }, {
     versionKey: false,
     timestamps: { createdAt: 'createTime', updatedAt: 'updateTime' }
