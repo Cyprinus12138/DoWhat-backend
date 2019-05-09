@@ -18,7 +18,6 @@ const authRouter = require('./routes/auth');
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
-app.use(verify_token_midware);
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -33,6 +32,8 @@ app.all('*', function(req, res, next) {
     res.header("Content-Type", "application/json;charset=utf-8");
     next();
 });
+
+app.use(verify_token_midware);
 
 app.use('/', indexRouter);
 app.use('/auth', authRouter);

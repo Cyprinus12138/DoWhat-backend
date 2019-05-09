@@ -11,7 +11,7 @@ router.post('/new', (req, res) => {
     if (!req.yb_uid) {
         let err = forbiddenError();
         res.status(err.statusCode);
-        res.json({
+        return res.json({
             success: false,
             msg: err.message
         });
