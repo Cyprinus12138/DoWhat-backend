@@ -50,6 +50,83 @@ router.post('/new', (req, res) => {
 
 });
 
+router.pos('/:planId', (req, res, next) => {
+    if (!req.yb_uid) {
+        let err = forbiddenError();
+        res.status(err.statusCode);
+        return res.json({
+            success: false,
+            msg: err.message
+        });
+    }
+    if(req.body.method === "PUT"){
+        async.waterfall(
+            [
+                function getPlan(callback) {
+                    Plan.findById(req.params.planId, (err, plan) => {
+                        if (err) return callback(err);
+                        callback(null, plan);
+                    });
+                },
+                function modifyPlan(plan, callback) {
+                    if (!plan) return callback(serverInternalError());
+                    plan.content = req.body.content;
+                    plan.title = req.body.title;
+                    plan.targetTime = req.body.targetTime;
+                    plan.isAlarm = req.body.isAlarm;
+                    plan.save((err) => {
+                        if (err) return callback(err);
+                    });
+                    callback(null, plan);
+                },
+            ],
+            function (err, plan) {
+                if (err) {
+                    res.status(err.statusCode | 500);
+                    return res.json({
+                        success: false,
+                        msg: err.message,
+                    });
+                }
+                res.json({
+                    success: true,
+                    plan,
+                });
+            }
+        )
+    } else if(req.body.method === "DELETE"){
+        async.waterfall(
+            [
+                function getPlan(callback) {
+                    Plan.findById(req.params.planId, (err, plan) => {
+                        if (err) return callback(err);
+                        callback(null, plan);
+                    });
+                },
+                function removePlan(plan, callback) {
+                    if (!plan) return callback(serverInternalError());
+                    plan.remove((err) => {
+                        if (err) return callback(err);
+                    });
+                    callback(null);
+                }
+            ],
+            function (err) {
+                if (err) {
+                    res.status(err.statusCode | 500);
+                    return res.json({
+                        success: false,
+                        msg: err.message,
+                    });
+                }
+                res.json({
+                    success: true,
+                });
+            }
+        )
+    } else return next();
+});
+
 router.route('/:planId')
     .put((req, res) => {
             if (!req.yb_uid) {
