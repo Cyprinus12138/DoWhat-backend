@@ -50,7 +50,7 @@ router.post('/new', (req, res) => {
 
 });
 
-router.pos('/:planId', (req, res, next) => {
+router.post('/:planId', (req, res, next) => {
     if (!req.yb_uid) {
         let err = forbiddenError();
         res.status(err.statusCode);
